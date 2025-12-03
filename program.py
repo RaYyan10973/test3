@@ -105,7 +105,7 @@ class Program:
             print(f"Успешно: {successful}")
             print(f"Ошибок: {failed}")
             print(f"Всего объектов: {len(self.objects)}")
-            
+        
         except FileNotFoundError:
             print(f"Файл {filename} не найден")
         except Exception as e:
@@ -138,6 +138,58 @@ class Program:
             print(f" Ошибка добавления объекта: {e}")
             return None
     
+    def save_to_file(self, filename=None):
+        """Сохраняет все объекты в указанный файл"""
+        if not self.objects:
+            print("Нет данных для сохранения!")
+            return False
+        
+        if filename is None:
+            filename = self.data_file
+        
+        try:
+            with open(filename, 'w', encoding='utf-8') as file:
+                for obj in self.objects:
+                    file.write(obj.to_file_format() + '\n')
+            
+            print(f"Данные успешно сохранены в файл '{filename}'")
+            print(f"Сохранено объектов: {len(self.objects)}")
+            return True
+            
+        except PermissionError:
+            print(f"Ошибка: Нет прав на запись в файл '{filename}'")
+            return False
+        except Exception as e:
+            print(f"Ошибка при сохранении файла: {e}")
+            return False
+    
+    def save_as(self):
+        """Сохраняет данные в новый файл  с новым названием (функция Сохранить как...)"""
+        if not self.objects:
+            print("Нет данных для сохранения")
+            return
+        
+        while True:
+            filename = input("Введите имя файла для сохранения (без расширения .txt): ").strip()
+            
+            if not filename:
+                print("Имя файла не может быть пустым")
+                continue
+            
+            if not filename.lower().endswith('.txt'):
+                filename += '.txt'
+            
+            import os
+            if os.path.exists(filename):
+                overwrite = input(f"Файл '{filename}' уже существует. Заменить? (да/нет): ").strip().lower()
+                if overwrite not in ['да',"ДА", 'д', 'y', 'yes']:
+                    print("Сохранение отменено.")
+                    return
+
+            if self.save_to_file(filename):
+                self.data_file = filename
+                return
+
     def save_object_to_file(self, water_object):
         """Сохраняет объект в файл"""
         try:
@@ -154,7 +206,7 @@ class Program:
             'river': River,
             'reservoir': Reservoir
         }
-        
+    
         if object_type not in type_map:
             return []
         
