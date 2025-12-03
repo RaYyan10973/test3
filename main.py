@@ -1,6 +1,9 @@
 from program import Program
 
 
+
+
+
 def display_all_data(program):
     """Вывод всех данных"""
     if not program.objects:
