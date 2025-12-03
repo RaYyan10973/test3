@@ -1,5 +1,5 @@
 from program import Program
-
+import os
 
 def display_all_data(program):
     """Вывод всех данных"""
@@ -67,11 +67,13 @@ def display_all_data(program):
     else:
         print("Водохранилища не найдены")
 
+def save_file_as(program):
+    program.save_as()
 
 def show_menu():
     """Главное меню"""
     program = Program()
-    
+
     while True:
         print("\n" + "=" * 50)
         print(" СИСТЕМА УПРАВЛЕНИЯ ВОДНЫМИ ОБЪЕКТАМИ")
@@ -83,6 +85,7 @@ def show_menu():
         print("5 - Добавить новую реку")
         print("6 - Добавить новое водохранилище")
         print("7 - Показать статистику")
+        print("8 - Сохранить файл как...")
         print("0 - Выход")
         print("-" * 50)
         
@@ -108,6 +111,8 @@ def show_menu():
             print(f"     Реки: {stats['rivers']}")
             print(f"    Водохранилища: {stats['reservoirs']}")
             print(f"    Всего объектов: {stats['total']}")
+        elif choice == '8':
+            save_file_as(program)
         elif choice == '0':
             print("👋 Выход из программы...")
             break
